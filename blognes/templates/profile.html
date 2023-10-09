@@ -34,7 +34,7 @@
 
   <div class="container mt-5 mb-3" id="editForm" style="display: none">
     <h2>Editar Perfil</h2>
-    <form method="post" action="/update/user">
+    <form id="formUpdateProfile">
       <div class="form-group">
         <label for="editName">Nome</label>
         <input
@@ -115,7 +115,13 @@
         />
       </div>
 
-      <button type="submit" class="btn btn-success">Salvar</button>
+      <button
+        type="button"
+        id="btnSendFormUpdateProfile"
+        class="btn btn-success"
+      >
+        Salvar
+      </button>
     </form>
   </div>
 
@@ -133,7 +139,7 @@
   let date = dateOfUser.innerHTML.split("-").reverse();
   dateOfUser.innerHTML = `${date[0]}/${date[1]}/${date[2]}`;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     const editProfileButton = document.getElementById("editProfileButton");
     const editForm = document.getElementById("editForm");
     const personalData = document.getElementById("personal-data");
@@ -152,6 +158,33 @@
         personalData.style.display = "flex";
       }
     });
+  });
+
+  const btnSendFormUpdateProfile = document.getElementById(
+    "btnSendFormUpdateProfile"
+  );
+
+  btnSendFormUpdateProfile.addEventListener("click", async () => {
+    const formData = new FormData(document.getElementById("formUpdateProfile"));
+    const url = "/profile";
+
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        body: formData,
+      });
+
+      if (response.ok) {
+        // Aguarde a resposta ser processada e, em seguida, redirecione
+        await response.json();
+
+        location.href = url;
+      } else {
+        window.alert("Ocorreu um erro. Por favor, atualize a página.");
+      }
+    } catch (error) {
+      location.href = url;
+    }
   });
 </script>
 

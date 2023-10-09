@@ -56,16 +56,14 @@ def login():
     )
 
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "PUT"])
 def profile():
-    return get_profile(cookies=request.cookies)
+    if request.method == "GET":
+        return get_profile(cookies=request.cookies)
 
-
-@app.route("/update/user", methods=["POST"])
-def update_profile():
     form: Dict[str, Any] = request.form.to_dict()
-
     update_user_date = map(int, form["date_of_birth"].split("-"))
+
     form["date_of_birth"] = _date(*update_user_date)
 
     return update_user(form, cookies=request.cookies)
