@@ -1,0 +1,42 @@
+{% extends "layout.html" %} {% block main %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header text-center">
+          <h3>Crie uma nova Postagem</h3>
+        </div>
+        <div class="card-body">
+          <form action="/post" method="post">
+            <div class="form-group">
+              <label for="title">Título da Postagem</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                placeholder="Digite o título da postagem"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="content">Conteúdo da Postagem</label>
+              <textarea
+                class="form-control"
+                id="content"
+                name="content"
+                rows="4"
+                placeholder="Digite o conteúdo da postagem"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Salvar Postagem
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
