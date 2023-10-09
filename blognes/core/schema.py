@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from typing import List
+from datetime import date
+from typing import Dict, List
 
 
 @dataclass
@@ -17,19 +18,26 @@ class Post:
 
 @dataclass
 class User:
+    cep: str
     name: str
+    city: str
+    email: str
+    telephone: str
+    home_address: str
     cookie: str | None
-    password: str = field(hash=True, compare=True)
+    date_of_birth: date
+    password: str
     posts: List[Post] = field(default_factory=list)
 
-    def __iter__(self):
-        return iter(self.posts)
-
-
-@dataclass
-class Users:
-    users: List[User] = field(default_factory=list)
-
-    def __iter__(self):
-        for user in self.users:
-            yield iter(user.posts)
+    def to_dict(self) -> Dict[str, str | date | List[Post]]:
+        return {
+            "cep": self.cep,
+            "name": self.name,
+            "city": self.city,
+            "email": self.email,
+            "telephone": self.telephone,
+            "home_address": self.home_address,
+            "date_of_birth": self.date_of_birth,
+            "password": self.password,
+            "posts": self.posts,
+        }
