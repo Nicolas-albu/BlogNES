@@ -16,6 +16,9 @@ class Post:
     content: str
     comments: List[Comment] = field(default_factory=list)
 
+    def add_comment(self, comment: Comment, /):
+        self.comments.append(comment)
+
 
 @dataclass
 class User:
