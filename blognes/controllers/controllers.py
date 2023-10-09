@@ -2,7 +2,14 @@ from typing import Any, Dict
 
 from flask import flash, make_response, redirect, render_template, url_for
 
-from ..core import Authenticator, Post, User, generate_id, generate_token
+from ..core import (
+    Authenticator,
+    Comment,
+    Post,
+    User,
+    generate_id,
+    generate_token,
+)
 from ..core.config import __COOKIE_NAME__
 
 auth = Authenticator()
@@ -99,3 +106,19 @@ def get_post(post_id: int):
         return render_template("post.html", post=_post)
 
     return redirect(url_for("index"))
+
+
+def post_comment(form: Dict[str, Any], /, *, cookies: Dict[str, str]):
+    global auth
+
+    _cookie = cookies[__COOKIE_NAME__]
+    post_id, comment = form.values()
+
+    if _user := auth.get_user(cookie=_cookie):
+        new_comment = Comment(comment, author=_user.name)
+
+        if _post := auth.get_post(int(post_id)):
+            _post.add_comment(new_comment)
+            return redirect(url_for("post", post_id=form["post_id"]))
+
+    return redirect(url_for("login"))
