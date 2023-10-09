@@ -32,9 +32,9 @@ Implemente as seguintes funcionalidades:
 
   - [x] Exibir o título, conteúdo e os comentários.
 
-- [ ] Área de comentários (opcional)
+- [x] Área de comentários (opcional)
 
-  - [ ] Adicione a funcionalidade de comentários em cada post. Cada comentário deve ter um autor e conteúdo.
+  - [x] Adicione a funcionalidade de comentários em cada post. Cada comentário deve ter um autor e conteúdo.
 
 - [ ] Página inicial (`index.html`)
 
