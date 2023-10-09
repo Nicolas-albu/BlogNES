@@ -13,6 +13,9 @@
       for (post of posts) {
         console.log(post);
 
+        const linkPost = document.createElement("a");
+        linkPost.href = `/post/${post.id}`;
+
         const card = document.createElement("div");
         card.className = "card m-2";
 
@@ -26,8 +29,9 @@
 
         card.appendChild(cardHeader);
         card.appendChild(cardBody);
+        linkPost.appendChild(card);
 
-        document.getElementById("row").appendChild(card);
+        document.getElementById("row").appendChild(linkPost);
       }
     })
     .catch((error) => {
