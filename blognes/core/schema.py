@@ -11,6 +11,7 @@ class Comment:
 
 @dataclass
 class Post:
+    id: int
     title: str
     content: str
     comments: List[Comment] = field(default_factory=list)
