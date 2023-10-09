@@ -24,9 +24,9 @@ Implemente as seguintes funcionalidades:
   - [x] Exibir informações sobre o usuário (nome, foto de perfil, etc)
   - [x] Implemente um formulário para o usuário poder editar seu usuário.
 
-- [ ] Página de criação de posts (`create_post.html`)
+- [x] Página de criação de posts (`create_post.html`)
 
-  - [ ] Criar um novo post, fornecendo um título e conteúdo.
+  - [x] Criar um novo post, fornecendo um título e conteúdo.
 
 - [ ] Página de visualização de Post (`post.html`)
 
