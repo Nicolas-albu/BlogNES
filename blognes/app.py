@@ -6,7 +6,9 @@ import toml
 from flask import Flask, render_template, request
 
 from .controllers import (
+    create_post,
     get_login,
+    get_page_post,
     get_posts_all_users,
     get_profile,
     post_login,
@@ -67,3 +69,14 @@ def profile():
     form["date_of_birth"] = _date(*update_user_date)
 
     return update_user(form, cookies=request.cookies)
+
+
+@app.route("/createPost", methods=["GET", "POST"])
+def post():
+    if request.method == "GET":
+        return get_page_post(cookies=request.cookies)
+
+    return create_post(
+        request.form.to_dict(),
+        cookies=request.cookies,
+    )

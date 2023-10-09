@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from flask import flash, make_response, redirect, render_template, url_for
 
-from ..core import Authenticator, User, generate_token
+from ..core import Authenticator, Post, User, generate_token
 from ..core.config import __COOKIE_NAME__
 
 auth = Authenticator()
@@ -69,5 +69,25 @@ def update_user(form: Dict[str, Any], /, *, cookies: Dict[str, str]):
     if _cookie := cookies.get(__COOKIE_NAME__):
         auth.update_user(form, cookie=_cookie)
         return redirect(url_for("profile"))
+
+    return redirect(url_for("login"))
+
+
+def get_page_post(*, cookies: Dict[str, str]):
+    if __COOKIE_NAME__ not in cookies:
+        return redirect(url_for("login"))
+
+    return render_template("create_post.html")
+
+
+def create_post(form: Dict[str, Any], /, *, cookies: Dict[str, str]):
+    global auth
+
+    _cookie = cookies[__COOKIE_NAME__]
+
+    if _user := auth.get_user(cookie=_cookie):
+        post = Post(**form)
+        _user.add_post(post)
+        return redirect(url_for("index"))
 
     return redirect(url_for("login"))

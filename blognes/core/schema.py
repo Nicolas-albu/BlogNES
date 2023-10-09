@@ -13,7 +13,7 @@ class Comment:
 class Post:
     title: str
     content: str
-    comments: List[Comment] | None
+    comments: List[Comment] = field(default_factory=list)
 
 
 @dataclass
@@ -28,6 +28,9 @@ class User:
     date_of_birth: date
     password: str
     posts: List[Post] = field(default_factory=list)
+
+    def add_post(self, post: Post) -> None:
+        self.posts.append(post)
 
     def to_dict(self) -> Dict[str, str | date | List[Post]]:
         return {

@@ -1,0 +1,42 @@
+{% extends "layout.html" %} {% block main %}
+
+<script>
+  let posts = [];
+
+  fetch("/posts/all")
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      posts = data.posts;
+
+      for (post of posts) {
+        console.log(post);
+
+        const card = document.createElement("div");
+        card.className = "card m-2";
+
+        const cardHeader = document.createElement("div");
+        cardHeader.className = "card-header text-center bg-primary text-white";
+        cardHeader.innerHTML = post.title;
+
+        const cardBody = document.createElement("div");
+        cardBody.className = "card-body bg-light";
+        cardBody.innerHTML = post.content;
+
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+
+        document.getElementById("row").appendChild(card);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+    });
+</script>
+
+<div class="container mt-5">
+  <div id="row" class="row justify-content-center"></div>
+</div>
+
+{% endblock %}
