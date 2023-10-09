@@ -1,7 +1,7 @@
 from typing import Any
 
 from .config import __SESSION_ADMIN__
-from .schema import User
+from .schema import Post, User
 
 
 class Authenticator:
@@ -54,3 +54,9 @@ class Authenticator:
                 for key, value in data.items():
                     setattr(_user, key, value)
                 break
+
+    def get_post(self, post_id: int, /) -> Post | None:
+        for _user in self.__users:
+            for post in _user.posts:
+                if post.id == post_id:
+                    return post
