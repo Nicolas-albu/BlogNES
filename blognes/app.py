@@ -7,6 +7,7 @@ from flask import Flask, render_template, request
 
 from .controllers import (
     get_login,
+    get_posts_all_users,
     get_profile,
     post_login,
     post_register,
@@ -20,14 +21,9 @@ with open(Path.cwd() / ".secrets.toml", "r", encoding="utf-8") as file:
     app.secret_key = toml.load(file).get("FLASK_SECRET_KEY")
 
 
-# @app.route("/posts/all")
-# def get_all_posts():
-#     posts = []
-
-#     for user in auth.users:
-#         posts += user.posts
-
-#     return {"posts": posts}
+@app.route("/posts/all")
+def get_all_posts():
+    return get_posts_all_users()
 
 
 @app.route("/")

@@ -8,6 +8,15 @@ from ..core.config import __COOKIE_NAME__
 auth = Authenticator()
 
 
+def get_posts_all_users():
+    posts = []
+
+    for user in auth.users:
+        posts += user.posts
+
+    return {"posts": posts}
+
+
 def post_register(form: Dict[str, Any], /):
     global auth
 
