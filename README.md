@@ -28,9 +28,9 @@ Implemente as seguintes funcionalidades:
 
   - [x] Criar um novo post, fornecendo um título e conteúdo.
 
-- [ ] Página de visualização de Post (`post.html`)
+- [x] Página de visualização de Post (`post.html`)
 
-  - [ ] Exibir o título, conteúdo e os comentários.
+  - [x] Exibir o título, conteúdo e os comentários.
 
 - [ ] Área de comentários (opcional)
 
