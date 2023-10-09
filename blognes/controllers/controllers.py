@@ -2,10 +2,11 @@ from typing import Any, Dict
 
 from flask import flash, make_response, redirect, render_template, url_for
 
-from ..core import Authenticator, Post, User, generate_token
+from ..core import Authenticator, Post, User, generate_id, generate_token
 from ..core.config import __COOKIE_NAME__
 
 auth = Authenticator()
+generator = generate_id()
 
 
 def get_posts_all_users():
@@ -86,8 +87,15 @@ def create_post(form: Dict[str, Any], /, *, cookies: Dict[str, str]):
     _cookie = cookies[__COOKIE_NAME__]
 
     if _user := auth.get_user(cookie=_cookie):
-        post = Post(**form)
+        post = Post(id=next(generator), **form)
         _user.add_post(post)
         return redirect(url_for("index"))
 
     return redirect(url_for("login"))
+
+
+def get_post(post_id: int):
+    if _post := auth.get_post(post_id):
+        return render_template("post.html", post=_post)
+
+    return redirect(url_for("index"))
