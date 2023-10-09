@@ -1,0 +1,62 @@
+{% extends "layout.html" %} {% block main %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header text-center">
+          <h3>Acesse a <strong>BlogNES</strong></h3>
+        </div>
+        <div class="card-body">
+          <form action="/auth/login" method="post">
+            <div class="form-group">
+              <label for="username">Nome de Usuário</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="username"
+                placeholder="Digite seu nome de usuário"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Digite sua senha"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Entrar
+            </button>
+          </form>
+          <hr />
+          <!-- Adicione uma linha horizontal para separar os botões -->
+          <div class="text-center">
+            <button
+              type="button"
+              class="btn btn-success"
+              onclick="window.location.href='/auth/register'"
+            >
+              Registrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="window.location.href='/'"
+            >
+              Continuar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

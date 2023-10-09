@@ -1,0 +1,158 @@
+{% extends "layout.html" %} {% block main %}
+
+<div class="col-md-12 text-center mt-5">
+  <h1>Informações do usuário</h1>
+</div>
+
+<div class="container mt-5">
+  <div id="personal-data" class="row">
+    <div class="col-md-6">
+      <h2>Dados Pessoais</h2>
+      <p><strong>Nome:</strong> <span id="userName">{{ user.name }}</span></p>
+      <p>
+        <strong>E-mail:</strong> <span id="userEmail">{{ user.email }}</span>
+      </p>
+      <p>
+        <strong>Data de Nascimento:</strong>
+        <span id="userDOB">{{ user.date_of_birth }}</span>
+      </p>
+      <p>
+        <strong>Telefone:</strong>
+        <span id="userPhone">{{ user.telephone }}</span>
+      </p>
+    </div>
+    <div class="col-md-6">
+      <h2>Endereço</h2>
+      <p>
+        <strong>Endereço:</strong>
+        <span id="userAddress">{{ user.home_address }}</span>
+      </p>
+      <p><strong>Cidade:</strong> <span id="userCity">{{ user.city }}</span></p>
+      <p><strong>CEP:</strong> <span id="userCEP">{{ user.cep }}</span></p>
+    </div>
+  </div>
+
+  <div class="container mt-5 mb-3" id="editForm" style="display: none">
+    <h2>Editar Perfil</h2>
+    <form method="post" action="/update/user">
+      <div class="form-group">
+        <label for="editName">Nome</label>
+        <input
+          type="text"
+          class="form-control"
+          id="editName"
+          name="name"
+          value="{{ user.name }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="editEmail">E-mail</label>
+        <input
+          type="email"
+          class="form-control"
+          id="editEmail"
+          name="email"
+          value="{{ user.email }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="editDOB">Data de Nascimento</label>
+        <input
+          type="date"
+          class="form-control"
+          id="editDOB"
+          name="date_of_birth"
+          value="{{ user.date_of_birth }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="editPhone">Telefone</label>
+        <input
+          type="text"
+          class="form-control"
+          id="editPhone"
+          name="telephone"
+          value="{{ user.telephone }}"
+          pattern="\((\d{2}|\d{3})\) (\d{5}|\d{4})-\d{4}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="editAddress">Endereço</label>
+        <input
+          type="text"
+          class="form-control"
+          id="editAddress"
+          name="home_address"
+          value="{{ user.home_address }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="editCity">Cidade</label>
+        <input
+          type="text"
+          class="form-control"
+          id="editCity"
+          name="city"
+          value="{{ user.city }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="editCEP">CEP</label>
+        <input
+          type="text"
+          class="form-control"
+          id="editCEP"
+          name="cep"
+          value="{{ user.cep }}"
+          pattern="\d{5}-\d{3}"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-success">Salvar</button>
+    </form>
+  </div>
+
+  <div class="row">
+    <div class="col-md-13 text-center">
+      <button id="editProfileButton" class="btn btn-primary mb-5">
+        Editar Perfil
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const dateOfUser = document.getElementById("userDOB");
+  let date = dateOfUser.innerHTML.split("-").reverse();
+  dateOfUser.innerHTML = `${date[0]}/${date[1]}/${date[2]}`;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const editProfileButton = document.getElementById("editProfileButton");
+    const editForm = document.getElementById("editForm");
+    const personalData = document.getElementById("personal-data");
+
+    editProfileButton.addEventListener("click", () => {
+      // Alternar a visibilidade dos elementos
+      if (editForm.style.display === "none") {
+        editForm.style.display = "block";
+
+        // Ocultar os dados pessoais
+        personalData.style.display = "none";
+      } else {
+        editForm.style.display = "none";
+
+        // Mostrar os dados pessoais
+        personalData.style.display = "flex";
+      }
+    });
+  });
+</script>
+
+{% endblock %}

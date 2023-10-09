@@ -1,0 +1,152 @@
+{% extends "layout.html" %} {% block main %}
+
+<script>
+  const dateOfToday = () => {
+    let day = today.getDate();
+    let month = today.getMonth() + 1;
+    let year = today.getFullYear();
+
+    if (day < 10) day = "0" + day;
+    if (month < 10) month = "0" + month;
+
+    return year + "-" + month + "-" + day;
+  };
+</script>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header text-center">
+          <h3>Registre-se na <strong>BlogNES</strong></h3>
+        </div>
+        <div class="card-body">
+          <form action="/auth/register" method="post">
+            <div class="form-group">
+              <label for="username">Nome de Usuário</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="name"
+                placeholder="Digite seu nome de usuário"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="Digite seu e-mail"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="CEP">CEP</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cep"
+                name="cep"
+                placeholder="Digite seu CEP"
+                pattern="\d{5}-\d{3}"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="city">Cidade</label>
+              <input
+                type="text"
+                class="form-control"
+                id="city"
+                name="city"
+                placeholder="Digite o nome da sua cidade"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="telephone">Telefone</label>
+              <input
+                type="text"
+                class="form-control"
+                id="telephone"
+                name="telephone"
+                placeholder="(00) 00000-0000"
+                pattern="\((\d{2}|\d{3})\) (\d{5}|\d{4})-\d{4}"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="home-address">Endereço Residencial</label>
+              <input
+                type="text"
+                class="form-control"
+                id="home-adress"
+                name="home_address"
+                placeholder="Digite seu endereço residencial"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="date-of-birth">Data de Nascimento</label>
+              <input
+                type="date"
+                class="form-control"
+                id="date-of-birth"
+                name="date_of_birth"
+                min="1900-01-01"
+                max="dateOfToday()"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Digite sua senha"
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              Entrar
+            </button>
+          </form>
+          <hr />
+          <!-- Adicione uma linha horizontal para separar os botões -->
+          <div class="text-center">
+            <button
+              type="button"
+              class="btn btn-success"
+              onclick="window.location.href='/auth/login'"
+            >
+              Login
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="window.location.href='/'"
+            >
+              Continuar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
