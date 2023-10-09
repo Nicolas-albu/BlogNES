@@ -12,6 +12,7 @@ from .controllers import (
     get_post,
     get_posts_all_users,
     get_profile,
+    post_comment,
     post_login,
     post_register,
     update_user,
@@ -86,3 +87,11 @@ def create_publication():
 @app.route("/post/<int:post_id>")
 def post(post_id: int):
     return get_post(post_id)
+
+
+@app.route("/newComment", methods=["POST"])
+def create_comment():
+    return post_comment(
+        request.form.to_dict(),
+        cookies=request.cookies,
+    )
