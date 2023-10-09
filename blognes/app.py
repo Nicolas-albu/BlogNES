@@ -9,6 +9,7 @@ from .controllers import (
     create_post,
     get_login,
     get_page_post,
+    get_post,
     get_posts_all_users,
     get_profile,
     post_login,
@@ -72,7 +73,7 @@ def profile():
 
 
 @app.route("/createPost", methods=["GET", "POST"])
-def post():
+def create_publication():
     if request.method == "GET":
         return get_page_post(cookies=request.cookies)
 
@@ -80,3 +81,8 @@ def post():
         request.form.to_dict(),
         cookies=request.cookies,
     )
+
+
+@app.route("/post/<int:post_id>")
+def post(post_id: int):
+    return get_post(post_id)
