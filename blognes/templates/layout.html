@@ -30,14 +30,88 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </head>
   <body>
+    <!-- Barra de Pesquisa -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">Blog do NES</a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Barra de Pesquisa -->
+        <form class="form-inline ml-auto">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Pesquisar..."
+              aria-label="Pesquisar..."
+              aria-describedby="button-addon2"
+            />
+            <div class="input-group-append">
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="button-addon2"
+              >
+                Pesquisar
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Botão de adição (+) na navbar -->
+        <button
+          type="button"
+          class="btn btn-primary ml-2 rounded-circle"
+          onclick="window.location.href='/createPost'"
+        >
+          +
+        </button>
+
+        <!--<button
+          type="button"
+          class="btn btn-link"
+          onclick="document.body.classList.toggle('dark-theme')"
+        >
+          <i class="fas fa-adjust"></i>
+        </button>-->
+
+        <!-- Botão com foto de perfil na navbar -->
+        <a href="/profile" class="btn btn-link navbar-btn">
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 48 48"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0 0h48v48H0z" fill="none" />
+            <g id="Shopicon">
+              <path
+                d="M31.278,25.525C34.144,23.332,36,19.887,36,16c0-6.627-5.373-12-12-12c-6.627,0-12,5.373-12,12
+              c0,3.887,1.856,7.332,4.722,9.525C9.84,28.531,5,35.665,5,44h38C43,35.665,38.16,28.531,31.278,25.525z M16,16c0-4.411,3.589-8,8-8
+              s8,3.589,8,8c0,4.411-3.589,8-8,8S16,20.411,16,16z M24,28c6.977,0,12.856,5.107,14.525,12H9.475C11.144,33.107,17.023,28,24,28z"
+              />
+            </g>
+          </svg>
+        </a>
+      </div>
+    </nav>
+
     <div
       class="d-flex flex-column align-items-center justify-content-center"
-      style="min-height: 100vh"
+      style="min-height: 70vh"
     >
       <!-- MAIN -->
       <main class="container">{% block main %}{% endblock %}</main>
@@ -47,5 +121,9 @@
       <div class="mt-2 alert alert-danger">{{messages[-1]}}</div>
       {% endif %} {% endwith %}
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </body>
 </html>

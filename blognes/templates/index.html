@@ -2,6 +2,7 @@
 
 <script>
   let posts = [];
+  const cardLimit = 5;
 
   fetch("/api/allPosts")
     .then((response) => {
@@ -10,28 +11,50 @@
     .then((data) => {
       posts = data.posts;
 
-      for (post of posts) {
-        console.log(post);
+      if (posts.length === 0) {
+        // Se não houver posts, exiba uma mensagem
+        const noPostsMessage = document.createElement("div");
+        noPostsMessage.className = "alert alert-info text-center";
+        noPostsMessage.textContent =
+          "Ainda não há posts disponíveis. Fique atento para futuras atualizações!";
 
-        const linkPost = document.createElement("a");
-        linkPost.href = `/post/${post.id}`;
+        document.getElementById("row").appendChild(noPostsMessage);
+      } else {
+        for (let i = 0; i < Math.min(posts.length, cardLimit); i++) {
+          const post = posts[i];
 
-        const card = document.createElement("div");
-        card.className = "card m-2";
+          const cardLink = document.createElement("a");
+          cardLink.href = `/post/${post.id}`;
+          cardLink.className = "card-link";
 
-        const cardHeader = document.createElement("div");
-        cardHeader.className = "card-header text-center bg-primary text-white";
-        cardHeader.innerHTML = post.title;
+          const card = document.createElement("div");
+          card.className = "card m-2";
+          card.style.width = "18rem";
 
-        const cardBody = document.createElement("div");
-        cardBody.className = "card-body bg-light";
-        cardBody.innerHTML = post.content;
+          const cardBody = document.createElement("div");
+          cardBody.className = "card-body bg-light";
 
-        card.appendChild(cardHeader);
-        card.appendChild(cardBody);
-        linkPost.appendChild(card);
+          const titleCard = document.createElement("h5");
+          titleCard.className = "card-title";
+          titleCard.innerHTML = post.title;
 
-        document.getElementById("row").appendChild(linkPost);
+          const subtitleCard = document.createElement("h6");
+          subtitleCard.className = "card-subtitle mb-2 text-muted";
+          subtitleCard.innerHTML = post.author;
+
+          const contentCard = document.createElement("p");
+          contentCard.className = "card-text";
+          contentCard.innerHTML = post.content;
+
+          cardBody.appendChild(titleCard);
+          cardBody.appendChild(subtitleCard);
+          cardBody.appendChild(contentCard);
+
+          card.appendChild(cardBody);
+          cardLink.appendChild(card);
+
+          document.getElementById("row").appendChild(cardLink);
+        }
       }
     })
     .catch((error) => {
