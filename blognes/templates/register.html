@@ -2,6 +2,7 @@
 
 <script>
   const dateOfToday = () => {
+    let today = new Date();
     let day = today.getDate();
     let month = today.getMonth() + 1;
     let year = today.getFullYear();
@@ -13,9 +14,9 @@
   };
 </script>
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
   <div class="row justify-content-center">
-    <div class="col-md-4">
+    <div class="col-md-10">
       <div class="card">
         <div class="card-header text-center">
           <h3>Registre-se na <strong>BlogNES</strong></h3>
@@ -46,54 +47,57 @@
               />
             </div>
 
-            <div class="form-group">
-              <label for="CEP">CEP</label>
-              <input
-                type="text"
-                class="form-control"
-                id="cep"
-                name="cep"
-                placeholder="Digite seu CEP"
-                pattern="\d{5}-\d{3}"
-                required
-              />
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="cep">CEP</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="cep"
+                  name="cep"
+                  placeholder="00000-000"
+                  pattern="\d{5}-\d{3}"
+                  required
+                />
+              </div>
+
+              <div class="form-group col-md-8">
+                <label for="city">Cidade</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  name="city"
+                  placeholder="Digite o nome da sua cidade"
+                  required
+                />
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="city">Cidade</label>
-              <input
-                type="text"
-                class="form-control"
-                id="city"
-                name="city"
-                placeholder="Digite o nome da sua cidade"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="telephone">Telefone</label>
-              <input
-                type="text"
-                class="form-control"
-                id="telephone"
-                name="telephone"
-                placeholder="(00) 00000-0000"
-                pattern="\((\d{2}|\d{3})\) (\d{5}|\d{4})-\d{4}"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="home-address">Endereço Residencial</label>
-              <input
-                type="text"
-                class="form-control"
-                id="home-adress"
-                name="home_address"
-                placeholder="Digite seu endereço residencial"
-                required
-              />
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="telephone">Telefone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="telephone"
+                  name="telephone"
+                  placeholder="(00) 00000-0000"
+                  pattern="\(\d{2}\) \d{4,5}-\d{4}"
+                  required
+                />
+              </div>
+              <div class="form-group col-md-8">
+                <label for="home-address">Endereço Residencial</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="home-address"
+                  name="home_address"
+                  placeholder="Digite seu endereço residencial"
+                  required
+                />
+              </div>
             </div>
 
             <div class="form-group">
@@ -122,7 +126,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">
-              Entrar
+              Registrar-se
             </button>
           </form>
           <hr />
@@ -131,7 +135,7 @@
             <button
               type="button"
               class="btn btn-success"
-              onclick="window.location.href='/auth/login'"
+              onclick="window.location.href='/auth'"
             >
               Login
             </button>
