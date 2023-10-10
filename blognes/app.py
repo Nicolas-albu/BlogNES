@@ -1,23 +1,13 @@
-from datetime import date as _date
+import datetime
 from pathlib import Path
 from typing import Any, Dict
 
 import toml
 from flask import Flask, render_template, request
 
-from .controllers import (
-    create_post,
-    get_login,
-    get_page_post,
-    get_post,
-    get_posts_all_users,
-    get_profile,
-    post_comment,
-    post_login,
-    post_register,
-    update_user,
-)
+from . import controllers
 from .core import hashed_password
+from .core.config import __COOKIE_NAME__
 
 app = Flask(__name__)
 
@@ -25,73 +15,81 @@ with open(Path.cwd() / ".secrets.toml", "r", encoding="utf-8") as file:
     app.secret_key = toml.load(file).get("FLASK_SECRET_KEY")
 
 
-@app.route("/posts/all")
+@app.route("/api/allPosts")
 def get_all_posts():
-    return get_posts_all_users()
+    return controllers.get_posts_all_users()
 
 
 @app.route("/")
-def index():
+def get_index():
     return render_template("index.html")
 
 
 @app.route("/auth/register", methods=["GET", "POST"])
-def register():
+def get_post_register():
     if request.method == "GET":
-        return render_template("register.html")
+        cookie = request.cookies.get(__COOKIE_NAME__)
+        return controllers.get_register(cookie=cookie)
 
     form: Dict[str, Any] = request.form.to_dict()
     form["password"] = hashed_password(form["password"])
 
     record_user_date = map(int, form["date_of_birth"].split("-"))
-    form["date_of_birth"] = _date(*record_user_date)
+    form["date_of_birth"] = datetime.date(*record_user_date)
 
-    return post_register(form)
+    return controllers.post_register(form)
 
 
-@app.route("/auth/login", methods=["GET", "POST"])
-def login():
+@app.route("/auth", methods=["GET", "POST"])
+def get_post_login():
     if request.method == "GET":
-        return get_login(cookies=request.cookies)
+        cookie = request.cookies.get(__COOKIE_NAME__)
+        return controllers.get_login(cookie=cookie)
 
-    return post_login(
+    return controllers.post_login(
         username=request.form["username"],
         password=hashed_password(request.form["password"]),
     )
 
 
 @app.route("/profile", methods=["GET", "PUT"])
-def profile():
+def get_put_profile():
+    cookie = request.cookies.get(__COOKIE_NAME__)
+
     if request.method == "GET":
-        return get_profile(cookies=request.cookies)
+        return controllers.get_profile(cookie=cookie)
 
     form: Dict[str, Any] = request.form.to_dict()
+
     update_user_date = map(int, form["date_of_birth"].split("-"))
+    form["date_of_birth"] = datetime.date(*update_user_date)
 
-    form["date_of_birth"] = _date(*update_user_date)
-
-    return update_user(form, cookies=request.cookies)
+    return controllers.update_profile(form, cookie=cookie)
 
 
 @app.route("/createPost", methods=["GET", "POST"])
-def create_publication():
-    if request.method == "GET":
-        return get_page_post(cookies=request.cookies)
+def get_post_publication_creation():
+    cookie = request.cookies.get(__COOKIE_NAME__)
 
-    return create_post(
+    if request.method == "GET":
+        return controllers.get_publication_creation(cookie=cookie)
+
+    return controllers.post_publication_creation(
         request.form.to_dict(),
-        cookies=request.cookies,
+        cookie=cookie,
     )
 
 
 @app.route("/post/<int:post_id>")
-def post(post_id: int):
-    return get_post(post_id)
+def get_publication(post_id: int):
+    return controllers.get_publication(post_id)
 
 
 @app.route("/newComment", methods=["POST"])
-def create_comment():
-    return post_comment(
+def post_comment():
+    cookie = request.cookies.get(__COOKIE_NAME__)
+
+    return controllers.post_comment(
         request.form.to_dict(),
-        cookies=request.cookies,
+        cookie=cookie,
     )
