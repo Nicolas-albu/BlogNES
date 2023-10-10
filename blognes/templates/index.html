@@ -3,7 +3,7 @@
 <script>
   let posts = [];
 
-  fetch("/posts/all")
+  fetch("/api/allPosts")
     .then((response) => {
       return response.json();
     })
