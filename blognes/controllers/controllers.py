@@ -11,12 +11,17 @@ generator = generate_id()
 
 # API
 def get_posts_all_users():
-    posts = []
+    all_posts = []
 
     for user in management.users:
-        posts += user.posts
+        _author = {"author": user.name}
+        user_posts = user.get_posts()
 
-    return {"posts": posts}
+        for post in user_posts:
+            post.update(_author)
+            all_posts.append(post)
+
+    return {"posts": all_posts}
 
 
 # Caso de Uso: Registrar-se
