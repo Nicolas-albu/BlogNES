@@ -19,6 +19,14 @@ class Post:
     def add_comment(self, comment: Comment, /):
         self.comments.append(comment)
 
+    def to_dict(self) -> Dict[str, str | int | List[Comment]]:
+        return {
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "comments": self.comments,
+        }
+
 
 @dataclass
 class User:
@@ -32,6 +40,9 @@ class User:
     date_of_birth: date
     password: str
     posts: List[Post] = field(default_factory=list)
+
+    def get_posts(self) -> List[Dict[str, str | int | List[Comment]]]:
+        return [_post.to_dict() for _post in self.posts]
 
     def add_post(self, post: Post) -> None:
         self.posts.append(post)
