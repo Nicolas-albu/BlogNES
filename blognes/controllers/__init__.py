@@ -1,6 +1,6 @@
 from .controllers import (
     get_login,
-    get_posts_all_users,
+    get_posts,
     get_profile,
     get_publication,
     get_publication_creation,
@@ -14,6 +14,7 @@ from .controllers import (
 
 __all__ = [
     "get_login",
+    "get_posts",
     "post_login",
     "get_profile",
     "post_comment",
@@ -21,7 +22,6 @@ __all__ = [
     "post_register",
     "update_profile",
     "get_publication",
-    "get_posts_all_users",
     "get_publication_creation",
     "post_publication_creation",
 ]

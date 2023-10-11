@@ -1,14 +1,17 @@
-from typing import Any, overload
+from typing import Any, List, TypeVar, overload
 
-from .config import __SESSION_ADMIN__
+from .config import __QUANTITY_POSTS_BY_PAGE__, __SESSION_ADMIN__
 from .schema import Post, User
+
+T = TypeVar("T")
 
 
 class Management:
-    __slots__ = ["__users"]
+    __slots__ = ["__users", "__pages"]
 
     def __init__(self):
         self.__users: list[User] = []
+        self.__pages: List[List[Post]] = []
 
         self._initialization()
 
@@ -20,18 +23,26 @@ class Management:
     def users(self) -> list[User]:
         return self.__users
 
-    def add_user(self, user: User, /) -> None:
-        self.__users.append(user)
+    @property
+    def pages(self) -> List[List[Post]]:
+        return self.__pages
+
+    @staticmethod
+    def __get_data(data: List[T], index: int) -> T | None:
+        try:
+            return data[index]
+        except IndexError:
+            return None
 
     @overload
-    def is_user(self, username: str, password: str) -> bool:
+    def is_user(self, *, username: str, password: str) -> bool:
         ...
 
     @overload
-    def is_user(self, cookie: str) -> bool:
+    def is_user(self, *, cookie: str) -> bool:
         ...
 
-    def is_user(self, *args, **kwargs) -> bool:
+    def is_user(self, **kwargs) -> bool:
         if "username" in kwargs and "password" in kwargs:
             username, password = kwargs["username"], kwargs["password"]
 
@@ -44,16 +55,35 @@ class Management:
                 if user.cookie == kwargs["cookie"]:
                     return True
 
-        elif args:
-            # Tratar como (username, password)
-            if len(args) == 2:
-                username, password = args[0], args[1]
-
-                for user in self.__users:
-                    if (user.name, user.password) == (username, password):
-                        return True
-
         return False
+
+    @overload
+    def get_post(self, *, post_id: int) -> Post | None:
+        ...
+
+    @overload
+    def get_post(self, *, search: str) -> List[Post] | None:
+        ...
+
+    def get_post(self, **kwargs) -> List[Post] | Post | None:
+        if post_id := kwargs.get("post_id"):
+            for _user in self.__users:  # O(n^2)
+                for post in _user.posts:
+                    if post.id == post_id:
+                        return post
+
+        if search := kwargs.get("search"):
+            posts = [
+                post
+                for _user in self.__users  # O(n^2)
+                for post in _user.posts
+                if search in post.title
+            ]
+
+            return posts
+
+    def add_user(self, user: User, /) -> None:
+        self.__users.append(user)
 
     def get_user(self, *, cookie: str) -> User | None:
         for user in self.__users:
@@ -61,12 +91,7 @@ class Management:
                 return user
 
     def set_session(
-        self,
-        username: str,
-        password: str,
-        /,
-        *,
-        cookie: str,
+        self, username: str, password: str, /, *, cookie: str
     ) -> None:
         for user in self.__users:
             if (user.name, user.password) == (username, password):
@@ -80,8 +105,15 @@ class Management:
                     setattr(_user, key, value)
                 break
 
-    def get_post(self, post_id: int, /) -> Post | None:
-        for _user in self.__users:
-            for post in _user.posts:
-                if post.id == post_id:
-                    return post
+    def add_post(self, new_post: Post, /) -> None:
+        if (last_page := self.__get_data(self.__pages, -1)) is None:
+            self.__pages.append([new_post])
+
+        elif len(last_page) == __QUANTITY_POSTS_BY_PAGE__:
+            self.__pages.append([new_post])
+
+        else:
+            self.__pages[-1].append(new_post)
+
+    def get_page(self, *, number_page: int) -> List[Post] | None:
+        return self.__get_data(self.__pages, number_page)

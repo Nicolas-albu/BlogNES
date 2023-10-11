@@ -10,18 +10,16 @@ generator = generate_id()
 
 
 # API
-def get_posts_all_users():
-    all_posts = []
+def get_posts(*, page: str | None, search: str | None):
+    if page and page.isdigit():
+        if posts := management.get_page(number_page=int(page)):
+            return {"posts": posts}
 
-    for user in management.users:
-        _author = {"author": user.name}
-        user_posts = user.get_posts()
+    if search:
+        if posts := management.get_post(search=search):
+            return {"posts": posts}
 
-        for post in user_posts:
-            post.update(_author)
-            all_posts.append(post)
-
-    return {"posts": all_posts}
+    return {"posts": []}
 
 
 # Caso de Uso: Registrar-se
@@ -57,7 +55,7 @@ def get_login(*, cookie: str | None):
 def post_login(*, username: str, password: str):
     global management
 
-    if management.is_user(username, password):
+    if management.is_user(username=username, password=password):
         cookie = generate_token(password)
         management.set_session(username, password, cookie=cookie)
 
@@ -103,8 +101,9 @@ def post_publication_creation(
     global management
 
     if cookie and (_user := management.get_user(cookie=cookie)):
-        post = Post(id=next(generator), **form)
+        post = Post(id=next(generator), **form, author=_user.name)
         _user.add_post(post)
+        management.add_post(post)
 
         return redirect(url_for("get_index"))
 
@@ -113,7 +112,7 @@ def post_publication_creation(
 
 # Caso de Uso: Visualizar Publicação
 def get_publication(post_id: int, /, *, author: str | None):
-    if author and (_post := management.get_post(post_id)):
+    if author and (_post := management.get_post(post_id=post_id)):
         return render_template("post.html", post=_post, author=author)
 
     return redirect(url_for("get_index"))
@@ -127,13 +126,14 @@ def post_comment(form: Dict[str, Any], /, *, cookie: str | None):
     if cookie and (_user := management.get_user(cookie=cookie)):
         new_comment = Comment(comment, author=_user.name)
 
-        if _post := management.get_post(int(post_id)):
+        if _post := management.get_post(post_id=int(post_id)):
             _post.add_comment(new_comment)
 
             return redirect(
                 url_for(
                     "get_publication",
                     post_id=form["post_id"],
+                    author=_user.name,
                 ),
             )
 
