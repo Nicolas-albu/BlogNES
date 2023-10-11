@@ -13,6 +13,7 @@ class Comment:
 class Post:
     id: int
     title: str
+    author: str
     content: str
     comments: List[Comment] = field(default_factory=list)
 
