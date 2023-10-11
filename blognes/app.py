@@ -82,7 +82,9 @@ def get_post_publication_creation():
 
 @app.route("/post/<int:post_id>")
 def get_publication(post_id: int):
-    return controllers.get_publication(post_id)
+    author = request.args.get("author")
+
+    return controllers.get_publication(post_id, author=author)
 
 
 @app.route("/newComment", methods=["POST"])
