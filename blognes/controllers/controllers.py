@@ -112,9 +112,9 @@ def post_publication_creation(
 
 
 # Caso de Uso: Visualizar Publicação
-def get_publication(post_id: int, /):
-    if _post := management.get_post(post_id):
-        return render_template("post.html", post=_post)
+def get_publication(post_id: int, /, *, author: str | None):
+    if author and (_post := management.get_post(post_id)):
+        return render_template("post.html", post=_post, author=author)
 
     return redirect(url_for("get_index"))
 
