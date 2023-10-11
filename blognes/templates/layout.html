@@ -30,9 +30,72 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+
+    <script>
+      const search = () => {
+        const searchTitle = document.getElementById("searchTitle").value;
+
+        fetch(`/api/getPosts?search=${searchTitle}`)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            posts = data.posts;
+
+            // Limpar posts anteriores
+            document.getElementById("row").innerHTML = "";
+
+            if (posts.length === 0) {
+              // Se não houver posts, exiba uma mensagem
+              const noPostsMessage = document.createElement("div");
+
+              noPostsMessage.className = "alert alert-warning text-center";
+              noPostsMessage.textContent = "Nenhum resultado encontrado.";
+
+              document.getElementById("row").appendChild(noPostsMessage);
+            } else {
+              for (const post of posts) {
+                const cardLink = document.createElement("a");
+                cardLink.href = `/post/${post.id}?author=${post.author}`;
+                cardLink.className = "card-link";
+
+                const card = document.createElement("div");
+                card.className = "card m-2";
+                card.style.width = "18rem";
+
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body bg-light";
+
+                const titleCard = document.createElement("h5");
+                titleCard.className = "card-title";
+                titleCard.innerHTML = post.title;
+
+                const subtitleCard = document.createElement("h6");
+                subtitleCard.className = "card-subtitle mb-2 text-muted";
+                subtitleCard.innerHTML = post.author;
+
+                const contentCard = document.createElement("p");
+                contentCard.className = "card-text";
+                contentCard.innerHTML = post.content;
+
+                cardBody.appendChild(titleCard);
+                cardBody.appendChild(subtitleCard);
+                cardBody.appendChild(contentCard);
+
+                card.appendChild(cardBody);
+                cardLink.appendChild(card);
+
+                document.getElementById("row").appendChild(cardLink);
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("Erro ao buscar dados:", error);
+          });
+      };
+    </script>
   </head>
   <body>
-    <!-- Barra de Pesquisa -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="/">Blog do NES</a>
 
@@ -53,6 +116,7 @@
         <form class="form-inline ml-auto">
           <div class="input-group">
             <input
+              id="searchTitle"
               type="text"
               class="form-control"
               placeholder="Pesquisar..."
@@ -63,7 +127,8 @@
               <button
                 class="btn btn-outline-secondary"
                 type="button"
-                id="button-addon2"
+                id="btnSearch"
+                onClick="search()"
               >
                 Pesquisar
               </button>
@@ -109,6 +174,35 @@
       </div>
     </nav>
 
+    <button id="btnNextPage" class="btn position-fixed p-0">
+      <svg
+        width="64px"
+        height="64px"
+        viewBox="0 0 24.00 24.00"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g
+          id="SVGRepo_tracerCarrier"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke="#CCCCCC"
+          stroke-width="0.8160000000000001"
+        ></g>
+        <g id="SVGRepo_iconCarrier">
+          <path
+            d="M6 12H18M18 12L13 7M18 12L13 17"
+            stroke="#175BB3"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+        </g>
+      </svg>
+    </button>
+
+    <!-- Conteúdo -->
     <div
       class="d-flex flex-column align-items-center justify-content-center"
       style="min-height: 70vh"
