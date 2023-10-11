@@ -1,65 +1,73 @@
 {% extends "layout.html" %} {% block main %}
-
 <script>
+  let nextPage = 0;
   let posts = [];
-  const cardLimit = 5;
 
-  fetch("/api/allPosts")
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      posts = data.posts;
+  const getNextPage = () => {
+    fetch(`/api/getPosts?page=${nextPage}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        posts = data.posts;
 
-      if (posts.length === 0) {
-        // Se não houver posts, exiba uma mensagem
-        const noPostsMessage = document.createElement("div");
-        noPostsMessage.className = "alert alert-info text-center";
-        noPostsMessage.textContent =
-          "Ainda não há posts disponíveis. Fique atento para futuras atualizações!";
+        // Limpar posts anteriores
+        document.getElementById("row").innerHTML = "";
 
-        document.getElementById("row").appendChild(noPostsMessage);
-      } else {
-        for (let i = 0; i < Math.min(posts.length, cardLimit); i++) {
-          const post = posts[i];
+        if (posts.length === 0) {
+          // Se não houver posts, exiba uma mensagem
+          const noPostsMessage = document.createElement("div");
 
-          const cardLink = document.createElement("a");
-          cardLink.href = `/post/${post.id}?author=${post.author}`;
-          cardLink.className = "card-link";
+          noPostsMessage.className = "alert alert-info text-center";
+          noPostsMessage.textContent =
+            "Ainda não há posts disponíveis. Fique atento para futuras atualizações!";
 
-          const card = document.createElement("div");
-          card.className = "card m-2";
-          card.style.width = "18rem";
+          document.getElementById("row").appendChild(noPostsMessage);
+        } else {
+          for (const post of posts) {
+            const cardLink = document.createElement("a");
+            cardLink.href = `/post/${post.id}?author=${post.author}`;
+            cardLink.className = "card-link";
 
-          const cardBody = document.createElement("div");
-          cardBody.className = "card-body bg-light";
+            const card = document.createElement("div");
+            card.className = "card m-2";
+            card.style.width = "18rem";
 
-          const titleCard = document.createElement("h5");
-          titleCard.className = "card-title";
-          titleCard.innerHTML = post.title;
+            const cardBody = document.createElement("div");
+            cardBody.className = "card-body bg-light";
 
-          const subtitleCard = document.createElement("h6");
-          subtitleCard.className = "card-subtitle mb-2 text-muted";
-          subtitleCard.innerHTML = post.author;
+            const titleCard = document.createElement("h5");
+            titleCard.className = "card-title";
+            titleCard.innerHTML = post.title;
 
-          const contentCard = document.createElement("p");
-          contentCard.className = "card-text";
-          contentCard.innerHTML = post.content;
+            const subtitleCard = document.createElement("h6");
+            subtitleCard.className = "card-subtitle mb-2 text-muted";
+            subtitleCard.innerHTML = post.author;
 
-          cardBody.appendChild(titleCard);
-          cardBody.appendChild(subtitleCard);
-          cardBody.appendChild(contentCard);
+            const contentCard = document.createElement("p");
+            contentCard.className = "card-text";
+            contentCard.innerHTML = post.content;
 
-          card.appendChild(cardBody);
-          cardLink.appendChild(card);
+            cardBody.appendChild(titleCard);
+            cardBody.appendChild(subtitleCard);
+            cardBody.appendChild(contentCard);
 
-          document.getElementById("row").appendChild(cardLink);
+            card.appendChild(cardBody);
+            cardLink.appendChild(card);
+
+            document.getElementById("row").appendChild(cardLink);
+          }
+
+          nextPage += 1;
         }
-      }
-    })
-    .catch((error) => {
-      console.error("Erro ao buscar dados:", error);
-    });
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar dados:", error);
+      });
+  };
+
+  getNextPage();
+  document.getElementById("btnNextPage").onclick = getNextPage;
 </script>
 
 <div class="container mt-5">
