@@ -15,9 +15,12 @@ with open(Path.cwd() / ".secrets.toml", "r", encoding="utf-8") as file:
     app.secret_key = toml.load(file).get("FLASK_SECRET_KEY")
 
 
-@app.route("/api/allPosts")
-def get_all_posts():
-    return controllers.get_posts_all_users()
+@app.route("/api/getPosts")
+def get_posts():
+    return controllers.get_posts(
+        page=request.args.get("page"),
+        search=request.args.get("search"),
+    )
 
 
 @app.route("/")
