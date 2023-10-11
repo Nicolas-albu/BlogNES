@@ -12,8 +12,10 @@ __SESSION_ADMIN__ = {
     "cookie": None,
     "date_of_birth": date(2023, 1, 1),
 }
+__QUANTITY_POSTS_BY_PAGE__ = 5
 
 __all__ = [
     "__COOKIE_NAME__",
     "__SESSION_ADMIN__",
+    "__QUANTITY_POSTS_BY_PAGE__",
 ]
