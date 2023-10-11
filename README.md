@@ -32,11 +32,23 @@ Implemente as seguintes funcionalidades:
 
   - [x] Exibir o título, conteúdo e os comentários.
 
-- [x] Área de comentários (opcional)
+- [x] Área de comentários (Opcional)
 
   - [x] Adicione a funcionalidade de comentários em cada post. Cada comentário deve ter um autor e conteúdo.
 
-- [ ] Página inicial (`index.html`)
+- [x] Página inicial (`index.html`)
 
-  - [ ] Esta página deverá exibir uma lista de posts, com paginação usando QueryString.
-  - [ ] Uma barra de pesquisa para filtrar os posts.
+  - [x] Esta página deverá exibir uma lista de posts, com paginação usando QueryString.
+  - [x] Uma barra de pesquisa para filtrar os posts.
+
+## **Modificações**
+
+- Modificar o endpoint `/api/allPosts` para `api/getPosts?page=<NUMERO_DA_PAGINA>`.
+- Na rota `/` será apresentado a View `ìndex.html`. Esta View irá realizar o seguintes passos:
+- A View terá uma variável contador `nextPage`.
+- A View irá consultar o endpoint `api/getPosts` para obter os posts utilizando `nextPage` para definir a página atual.
+- A View irá apresentar esses posts obtidos.
+- Será apresentado um botão `id="btnNextPage"`, com a funcionalidade de paginação na View.
+- A View irá consultar novamente a endpoint `api/getPosts`, para obter os posts utilizando `nextPage` (valor da próxima página).
+- Este botão `id="btnNextPage"` irá remover todos os posts da página atual, e
+- Irá para apresentar os posts na View.
