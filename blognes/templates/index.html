@@ -24,7 +24,7 @@
           const post = posts[i];
 
           const cardLink = document.createElement("a");
-          cardLink.href = `/post/${post.id}`;
+          cardLink.href = `/post/${post.id}?author=${post.author}`;
           cardLink.className = "card-link";
 
           const card = document.createElement("div");
