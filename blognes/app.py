@@ -17,6 +17,12 @@ with open(Path.cwd() / ".secrets.toml", "r", encoding="utf-8") as file:
 
 @app.route("/api/getPosts")
 def get_posts():
+    """
+    Rota para obter publicações com base em parâmetros de página e pesquisa.
+
+    Returns:
+        dict: Um dicionário contendo as publicações encontradas.
+    """
     return controllers.get_posts(
         page=request.args.get("page"),
         search=request.args.get("search"),
@@ -25,11 +31,24 @@ def get_posts():
 
 @app.route("/")
 def get_index():
+    """
+    Rota para a página inicial.
+
+    Returns:
+        str: A página inicial.
+    """
     return render_template("index.html")
 
 
 @app.route("/auth/register", methods=["GET", "POST"])
 def get_post_register():
+    """
+    Rota para registro de usuário. Suporta solicitações GET e POST.
+
+    Returns:
+        response: A página de registro (GET) ou o registro de um
+            novo usuário (POST).
+    """
     if request.method == "GET":
         cookie = request.cookies.get(__COOKIE_NAME__)
         return controllers.get_register(cookie=cookie)
@@ -45,6 +64,13 @@ def get_post_register():
 
 @app.route("/auth", methods=["GET", "POST"])
 def get_post_login():
+    """
+    Rota para login de usuário. Suporta solicitações GET e POST.
+
+    Returns:
+        response: A página de login ou inicia uma sessão para este
+            usuário (POST).
+    """
     if request.method == "GET":
         cookie = request.cookies.get(__COOKIE_NAME__)
         return controllers.get_login(cookie=cookie)
@@ -57,6 +83,13 @@ def get_post_login():
 
 @app.route("/profile", methods=["GET", "PUT"])
 def get_put_profile():
+    """
+    Rota para visualizar e atualizar o perfil do usuário. Suporta solicitações
+    GET e PUT.
+
+    Returns:
+        response: A página de perfil (GET) ou atualização do perfil (PUT).
+    """
     cookie = request.cookies.get(__COOKIE_NAME__)
 
     if request.method == "GET":
@@ -72,6 +105,13 @@ def get_put_profile():
 
 @app.route("/createPost", methods=["GET", "POST"])
 def get_post_publication_creation():
+    """
+    Rota para criação de publicação. Suporta solicitações GET e POST.
+
+    Returns:
+        response: A página de criação de publicação (GET) ou criação de um
+            novo Post (POST).
+    """
     cookie = request.cookies.get(__COOKIE_NAME__)
 
     if request.method == "GET":
@@ -85,6 +125,16 @@ def get_post_publication_creation():
 
 @app.route("/post/<int:post_id>")
 def get_publication(post_id: int):
+    """
+    Rota para visualizar uma postagem específica.
+
+    Args:
+        post_id (int): O ID da postagem a ser visualizada.
+
+    Returns:
+        response: A página da postagem ou redirecionamento para a página
+            inicial.
+    """
     author = request.args.get("author")
 
     return controllers.get_publication(post_id, author=author)
@@ -92,6 +142,13 @@ def get_publication(post_id: int):
 
 @app.route("/newComment", methods=["POST"])
 def post_comment():
+    """
+    Rota para adicionar comentários a uma postagem. Suporta solicitações POST.
+
+    Returns:
+        response: Redirecionamento para a página da postagem ou página de
+            login.
+    """
     cookie = request.cookies.get(__COOKIE_NAME__)
 
     return controllers.post_comment(
